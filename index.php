@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Jika user belum login, arahkan ke halaman login
+if (empty($_SESSION["username_alhidayah"])) {
+    include 'login.php';
+    exit; // Pastikan eksekusi skrip dihentikan setelah mengarahkan ke login.php
+}
+
 // Set a default page
 $page = "home.php";
 
