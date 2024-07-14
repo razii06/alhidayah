@@ -31,5 +31,3 @@ sebuah aplikasi yang digunakan untuk mengelompokkan kelas sesuai dengan kemampua
     - Daftar Nilai Santri 
     - Daftar Materi
 
-    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-fullscreen-md-down"></div>

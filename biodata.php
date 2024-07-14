@@ -115,7 +115,7 @@ while ($record = mysqli_fetch_array($query)) {
                     <div class="modal-dialog modal-xl modal-fullscreen-md-down">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Detail KelasBiodata Santri</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Kelas Biodata Santri</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -191,7 +191,7 @@ while ($record = mysqli_fetch_array($query)) {
                     <div class="modal-dialog modal-xl modal-fullscreen-md-down">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Biodata Santri</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Biodata Santri</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
