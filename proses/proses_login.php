@@ -1,36 +1,20 @@
 <?php
 session_start();
 include ("connect.php");
-
-if (isset($_POST['submit_validate'])) {
-    $username = isset($_POST['username']) ? $_POST['username'] : "";
-    $password = isset($_POST['password']) ? $_POST['password'] : "";
-
-    // Sanitasi input (jika perlu)
-    $username = htmlentities($username);
-
-    // Menggunakan md5 untuk password (tidak direkomendasikan)
-    $password = md5($password);
-
-    // Query menggunakan parameter binding dan prepared statement
-    $stmt = $conn->prepare("SELECT * FROM tb_user WHERE username=? AND password=?");
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+$username = (isset($_POST['username'])) ? htmlentities($_POST['username']) : "";
+$password = (isset($_POST['password'])) ? md5(htmlentities($_POST['password'])) : "";
+if (!empty($_POST['submit_validate'])) {
+    $query = mysqli_query($conn, "SELECT * FROM tb_user WHERE username='$username' AND password='$password'");
+    $hasil = mysqli_fetch_array($query);
+    if ($hasil) {
         $_SESSION["username_alhidayah"] = $username;
         header('Location: ../home');
-        exit; // Pastikan untuk keluar setelah pengalihan
+        exit; // Make sure to exit after redirect
     } else {
         echo '<script>
             alert("Username atau password yang Anda masukkan salah");
             window.location.href = "../login";
         </script>';
     }
-
-    // Menutup prepared statement
-    $stmt->close();
 }
 ?>
