@@ -1,22 +1,39 @@
 <?php
 include "proses/connect.php";
-$query = mysqli_query($conn, "SELECT * FROM biodata");
+
+$search = '';
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $query = mysqli_query($conn, "SELECT * FROM biodata WHERE nama LIKE '$search%'");
+} else {
+    $query = mysqli_query($conn, "SELECT * FROM biodata");
+}
+
 $result = [];
 while ($record = mysqli_fetch_array($query)) {
     $result[] = $record;
 }
 ?>
+
 <div class="col-lg-9 mt-2 mb-3">
     <div class="card">
         <div class="card-header">Daftar Kelas</div>
         <div class="card-body">
             <div class="row">
                 <h5 class="card-title justify-content-right">Biodata Santri Al-Hidayah</h5>
+                <div class="col d-flex justify-content-start">
+                    <form class="d-flex" action="" method="GET">
+                        <input class="form-control me-2" type="search" placeholder="Cari Nama" aria-label="Search"
+                            name="search" value="<?php echo $search; ?>">
+                        <button class="btn btn-outline-success" type="submit">Cari</button>
+                    </form>
+                </div>
                 <div class="col d-flex justify-content-end">
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalTambahbiodata">Tambah
                         Biodata</button>
                 </div>
             </div>
+
             <!-- Modal tambah biodata -->
             <div class="modal fade" id="ModalTambahbiodata" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
@@ -155,30 +172,25 @@ while ($record = mysqli_fetch_array($query)) {
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input disabled type="text" class="form-control" id="floatingInputNoHpWali"
-                                        placeholder="Nomor Hp. Wali" name="nohp_wali"
+                                        placeholder="Nomor Hp Wali" name="nohp_wali"
                                         value="<?php echo $row['nohp_wali'] ?>">
                                     <label for="floatingInputNoHpWali">Nomor Hp. Wali</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input disabled type="text" class="form-control" id="floatingInputAlamat"
-                                        placeholder="Alamat" name="alamat" value="<?php echo $row['alamat'] ?>">
-                                    <label for="floatingInputAlamat">Alamat</label>
+                                    <textarea disabled class="form-control" id="floatingTextareaAlamat" placeholder="Alamat"
+                                        name="alamat"
+                                        style="height: 150px; width: 100%;"><?php echo $row['alamat'] ?></textarea>
+                                    <label for="floatingTextareaAlamat">Alamat</label>
+                                    <div class="invalid-feedback">Masukkan Alamat</div>
                                 </div>
-                                <div disabled class="text-center">
-                                    <img src="<?php echo $row['foto'] ?>" alt="Foto Santri" class="img-fluid">
+                                <div class="form-floating mb-3">
+                                    <input disabled type="text" class="form-control" id="floatingInputFoto"
+                                        placeholder="Foto" name="foto" value="<?php echo $row['foto'] ?>">
+                                    <label for="floatingInputFoto">Foto</label>
                                 </div>
-                                <div class="text-center mt-3">
-                                    <?php
-                                    if ($row['kelas'] == '1-A (L)' || $row['kelas'] == '1-A (P)') {
-                                        echo '<span class="badge bg-success">Kelas Inti</span>';
-                                    } else {
-                                        echo '<span class="badge bg-secondary">Kelas Biasa</span>';
-                                    }
-                                    ?>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -191,84 +203,88 @@ while ($record = mysqli_fetch_array($query)) {
                     <div class="modal-dialog modal-xl modal-fullscreen-md-down">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Biodata Santri</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Kelas Biodata Santri</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form class="needs-validation" novalidate action="proses/proses_edit_biodata.php"
-                                    method="POST">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInputNIS" placeholder="NIS"
-                                            name="nis" required value="<?php echo $row['nis'] ?>">
-                                        <label for="floatingInputNIS">NIS</label>
-                                        <div class="invalid-feedback">Masukkan Nomor Induk Santri</div>
-                                    </div>
+                                    method="POST" enctype="multipart/form-data" id="editBiodataForm">
+                                    <input type="hidden" name="nis" value="<?php echo $row['nis'] ?>">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="floatingInputNama" placeholder="Nama"
-                                            name="nama" required value="<?php echo $row['nama'] ?>">
+                                            name="nama" value="<?php echo $row['nama'] ?>" required>
                                         <label for="floatingInputNama">Nama</label>
-                                        <div class="invalid-feedback">Masukkan Nama Santri</div>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="floatingInputUsia" placeholder="Usia"
-                                            name="usia" required value="<?php echo $row['usia'] ?>">
+                                            name="usia" value="<?php echo $row['usia'] ?>" required>
                                         <label for="floatingInputUsia">Usia</label>
-                                        <div class="invalid-feedback">Masukkan Usia Santri</div>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="floatingInputTglLahir"
-                                            placeholder="Tanggal Lahir" name="tgl_lahir" required
-                                            value="<?php echo $row['tgl_lahir'] ?>">
+                                            placeholder="Tanggal Lahir" name="tgl_lahir"
+                                            value="<?php echo $row['tgl_lahir'] ?>" required>
                                         <label for="floatingInputTglLahir">Tanggal Lahir</label>
-                                        <div class="invalid-feedback">Masukkan Tanggal Lahir</div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInputJenisKelamin"
-                                            placeholder="Jenis Kelamin" name="jenis_kelamin" required
-                                            value="<?php echo $row['jenis_kelamin'] ?>">
-                                        <label for="floatingInputJenisKelamin">Jenis Kelamin</label>
-                                        <div class="invalid-feedback">Pilih Jenis Kelamin</div>
+                                        <select class="form-select" aria-label="Default select example" name="jenis_kelamin"
+                                            required>
+                                            <option value="Laki-laki" <?php if ($row['jenis_kelamin'] == 'Laki-laki')
+                                                echo 'selected'; ?>>Laki-laki</option>
+                                            <option value="Perempuan" <?php if ($row['jenis_kelamin'] == 'Perempuan')
+                                                echo 'selected'; ?>>Perempuan</option>
+                                        </select>
+                                        <label for="floatingInput">Jenis Kelamin</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInputKelas" placeholder="Kelas"
-                                            name="kelas" required value="<?php echo $row['kelas'] ?>">
-                                        <label for="floatingInputKelas">Kelas</label>
-                                        <div class="invalid-feedback">Masukkan Kelas</div>
+                                        <select class="form-select" aria-label="Default select example" name="kelas"
+                                            required>
+                                            <option value="1-A (L)" <?php if ($row['kelas'] == '1-A (L)')
+                                                echo 'selected'; ?>>
+                                                1-A (L)</option>
+                                            <option value="1-A (P)" <?php if ($row['kelas'] == '1-A (P)')
+                                                echo 'selected'; ?>>
+                                                1-A (P)</option>
+                                            <option value="1-B (L)" <?php if ($row['kelas'] == '1-B (L)')
+                                                echo 'selected'; ?>>
+                                                1-B (L)</option>
+                                            <option value="1-B (P)" <?php if ($row['kelas'] == '1-B (P)')
+                                                echo 'selected'; ?>>
+                                                1-B (P)</option>
+                                            <option value="1-C (L)" <?php if ($row['kelas'] == '1-C (L)')
+                                                echo 'selected'; ?>>
+                                                1-C (L)</option>
+                                            <option value="1-C (P)" <?php if ($row['kelas'] == '1-C (P)')
+                                                echo 'selected'; ?>>
+                                                1-C (P)</option>
+                                        </select>
+                                        <label for="floatingInput">Kelas</label>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="floatingInputNoHpWali"
-                                            placeholder="Nomor Hp. Wali" name="nohp_wali" required
-                                            value="<?php echo $row['nohp_wali'] ?>">
+                                            placeholder="Nomor Hp Wali" name="nohp_wali"
+                                            value="<?php echo $row['nohp_wali'] ?>" required>
                                         <label for="floatingInputNoHpWali">Nomor Hp. Wali</label>
-                                        <div class="invalid-feedback">Masukkan Nomor Hp. Wali</div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInputAlamat"
-                                            placeholder="Alamat" name="alamat" required
-                                            value="<?php echo $row['alamat'] ?>">
-                                        <label for="floatingInputAlamat">Alamat</label>
-                                        <div class="invalid-feedback">Masukkan Alamat</div>
+                                        <textarea class="form-control" id="floatingTextareaAlamat" placeholder="Alamat"
+                                            name="alamat" style="height: 150px; width: 100%;"
+                                            required><?php echo $row['alamat'] ?></textarea>
+                                        <label for="floatingTextareaAlamat">Alamat</label>
                                     </div>
-
+                                    <div class="form-floating mb-3">
+                                        <input type="file" class="form-control" id="floatingInputFoto" name="foto"
+                                            accept="image/*">
+                                        <label for="floatingInputFoto">Foto</label>
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-success" name="input_user_validate"
-                                            value="12345">Simpan Edit</button>
+                                        <button type="submit" class="btn btn-success" name="edit_user_validate"
+                                            value="12345">Simpan
+                                            Perubahan</button>
                                     </div>
                                 </form>
-                                <div disabled class="text-center">
-                                    <img src="<?php echo $row['foto'] ?>" alt="Foto Santri" class="img-fluid">
-                                </div>
-                                <div class="text-center mt-3">
-                                    <?php
-                                    if ($row['kelas'] == '1-A (L)' || $row['kelas'] == '1-A (P)') {
-                                        echo '<span class="badge bg-success">Kelas Inti</span>';
-                                    } else {
-                                        echo '<span class="badge bg-secondary">Kelas Biasa</span>';
-                                    }
-                                    ?>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -278,23 +294,21 @@ while ($record = mysqli_fetch_array($query)) {
                 <!-- Modal Delete -->
                 <div class="modal fade" id="ModalDelete<?php echo $row['nis'] ?>" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-md modal-fullscreen-md-down">
+                    <div class="modal-dialog modal-xl modal-fullscreen-md-down">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Biodata Santri</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Kelas Biodata Santri</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form class="needs-validation" novalidate action="proses/proses_delete_biodata.php"
-                                    method="POST">
-                                    <input type="hidden" value="<?php echo $row['nis'] ?>" name="nis">
-                                    <div class="col-lg-12">
-                                        Apakah Anda ingin Menghapus Biodata <b><?php echo $row['nis'] ?></b>?
-                                    </div>
+                                    method="POST" enctype="multipart/form-data" id="deleteBiodataForm">
+                                    <input type="hidden" name="nis" value="<?php echo $row['nis'] ?>">
+                                    <p>Apakah Anda yakin ingin menghapus biodata santri ini?</p>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-danger" name="input_user_validate"
+                                        <button type="submit" class="btn btn-danger" name="delete_user_validate"
                                             value="12345">Hapus</button>
                                     </div>
                                 </form>
@@ -303,8 +317,6 @@ while ($record = mysqli_fetch_array($query)) {
                     </div>
                 </div>
                 <!-- End modal Delete -->
-
-
             <?php endforeach; ?>
 
             <?php if (empty($result)): ?>
@@ -328,9 +340,9 @@ while ($record = mysqli_fetch_array($query)) {
                         <tbody>
                             <?php
                             $no = 1;
-                            foreach ($result as $row): ?>
+                            foreach ($result as $row) { ?>
                                 <tr>
-                                    <td><?php echo $no++; ?></td>
+                                    <th scope="row"><?php echo $no++ ?></th>
                                     <td><?php echo $row['nis'] ?></td>
                                     <td><?php echo $row['nama'] ?></td>
                                     <td><?php echo $row['usia'] ?></td>
@@ -350,7 +362,8 @@ while ($record = mysqli_fetch_array($query)) {
                                                 class="bi bi-trash"></i></button>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -358,6 +371,7 @@ while ($record = mysqli_fetch_array($query)) {
         </div>
     </div>
 </div>
+
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields

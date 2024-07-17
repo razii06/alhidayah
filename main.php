@@ -1,18 +1,18 @@
 <?php
-session_start();
+// Memeriksa apakah sesi sudah dimulai
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (empty($_SESSION["username_alhidayah"])) {
     header('Location: login');
     exit; // Pastikan untuk menghentikan eksekusi skrip setelah redirect
 }
 
-    include "proses/connect.php";
-    $query = mysqli_query($conn, "SELECT * FROM tb_user WHERE username='$_SESSION[username_alhidayah]'");
-    $hasil = mysqli_fetch_array($query);
-
-
+include "proses/connect.php";
+$query = mysqli_query($conn, "SELECT * FROM tb_user WHERE username='$_SESSION[username_alhidayah]'");
+$hasil = mysqli_fetch_array($query);
 ?>
-
-
 <!doctype html>
 <html lang="en">
 
@@ -29,7 +29,7 @@ if (empty($_SESSION["username_alhidayah"])) {
     <!--header-->
     <?php include ("header.php"); ?>
     <!--end header-->
-    <div clas="container-lg">
+    <div class="container-lg">
         <div class="row">
             <!--sidebar-->
             <?php include ("sidebar.php"); ?>
@@ -41,7 +41,7 @@ if (empty($_SESSION["username_alhidayah"])) {
             ?>
             <!--end content-->
         </div>
-        <div class="fixed-bottom text-center mb-2 bg-success mb-2 text-light">
+        <div class="fixed-bottom text-center mb-2 bg-success text-light">
             Al-Hidayah 2024
         </div>
     </div>

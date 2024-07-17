@@ -1,5 +1,9 @@
 <?php
-session_start();
+// Memeriksa apakah sesi sudah dimulai
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!empty($_SESSION["username_alhidayah"])) {
     header('Location: ../home');
     exit;
