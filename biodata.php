@@ -37,7 +37,7 @@ while ($record = mysqli_fetch_array($query)) {
             <!-- Modal tambah biodata -->
             <div class="modal fade" id="ModalTambahbiodata" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-fullscreen-md-down">
+                <div class="modal-dialog modal-fullscreen-md-down">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Tambah biodata</h5>
@@ -140,7 +140,6 @@ while ($record = mysqli_fetch_array($query)) {
                                     <input disabled type="text" class="form-control" id="floatingInputNIS" placeholder="NIS"
                                         name="nis" value="<?php echo $row['nis'] ?>">
                                     <label for="floatingInputNIS">NIS</label>
-                                    <div class="invalid-feedback">Masukkan Nomor Induk Santri</div>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input disabled type="text" class="form-control" id="floatingInputNama"
@@ -163,12 +162,14 @@ while ($record = mysqli_fetch_array($query)) {
                                         placeholder="Jenis Kelamin" name="jenis_kelamin"
                                         value="<?php echo $row['jenis_kelamin'] ?>">
                                     <label for="floatingInputJenisKelamin">Jenis Kelamin</label>
-                                    <div class="invalid-feedback">Pilih Jenis Kelamin</div>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input disabled type="text" class="form-control" id="floatingInputKelas"
                                         placeholder="Kelas" name="kelas" value="<?php echo $row['kelas'] ?>">
                                     <label for="floatingInputKelas">Kelas</label>
+                                    <?php if ($row['kelas'] == '1-A (L)' || $row['kelas'] == '1-A (P)'): ?>
+                                        <div class="alert alert-info mt-2">Santri ini masuk ke kelas inti</div>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input disabled type="text" class="form-control" id="floatingInputNoHpWali"
@@ -181,12 +182,6 @@ while ($record = mysqli_fetch_array($query)) {
                                         name="alamat"
                                         style="height: 150px; width: 100%;"><?php echo $row['alamat'] ?></textarea>
                                     <label for="floatingTextareaAlamat">Alamat</label>
-                                    <div class="invalid-feedback">Masukkan Alamat</div>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input disabled type="text" class="form-control" id="floatingInputFoto"
-                                        placeholder="Foto" name="foto" value="<?php echo $row['foto'] ?>">
-                                    <label for="floatingInputFoto">Foto</label>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -271,11 +266,6 @@ while ($record = mysqli_fetch_array($query)) {
                                             name="alamat" style="height: 150px; width: 100%;"
                                             required><?php echo $row['alamat'] ?></textarea>
                                         <label for="floatingTextareaAlamat">Alamat</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="file" class="form-control" id="floatingInputFoto" name="foto"
-                                            accept="image/*">
-                                        <label for="floatingInputFoto">Foto</label>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
